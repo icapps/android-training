@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name" translatable="false">Nicolaldi</string>
+
+    <string name="item_apple">Apple</string>
+    <string name="item_banana">Banana</string>
+    <string name="item_berry">Berry</string>
+    <string name="item_grape">Grape</string>
+    <string name="item_grapefruit">Grapefruit</string>
+    <string name="item_lemon">Lemon</string>
+    <string name="item_lime">Lime</string>
+    <string name="item_orange">Orange</string>
+    <string name="item_pear">Pear</string>
+    <string name="item_strawberry">Strawberry</string>
+    <string name="item_watermelon">Watermelon</string>
+
+</resources>

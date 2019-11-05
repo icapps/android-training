@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="item_apple">Appel</string>
+    <string name="item_banana">Banaan</string>
+    <string name="item_berry">Bes</string>
+    <string name="item_grape">Druif</string>
+</resources>
