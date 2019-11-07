@@ -13,4 +13,20 @@
     <string name="item_strawberry">Strawberry</string>
     <string name="item_watermelon">Watermelon</string>
 
+    <string name="login_label_hint">Enter your pincode to unlock the screen</string>
+    <string name="login_button_0" translatable="false">0</string>
+    <string name="login_button_1" translatable="false">1</string>
+    <string name="login_button_2" translatable="false">2</string>
+    <string name="login_button_3" translatable="false">3</string>
+    <string name="login_button_4" translatable="false">4</string>
+    <string name="login_button_5" translatable="false">5</string>
+    <string name="login_button_6" translatable="false">6</string>
+    <string name="login_button_7" translatable="false">7</string>
+    <string name="login_button_8" translatable="false">8</string>
+    <string name="login_button_9" translatable="false">9</string>
+    <string name="login_button_ok">OK</string>
+
+    <string name="cart_button_pay">Pay</string>
+    <string name="cart_button_share">Share my cart!</string>
+
 </resources>

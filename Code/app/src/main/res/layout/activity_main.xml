@@ -17,14 +17,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/items_container"
-        android:text="Share my cart!" />
+        android:text="@string/cart_button_share" />
 
     <Button
         android:id="@+id/button_pay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/button_share"
-        android:text="Pay" />
+        android:text="@string/cart_button_pay" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shoppingcart_view"

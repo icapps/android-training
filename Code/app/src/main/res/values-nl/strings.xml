@@ -4,4 +4,15 @@
     <string name="item_banana">Banaan</string>
     <string name="item_berry">Bes</string>
     <string name="item_grape">Druif</string>
+    <string name="item_grapefruit">Pompelmoes</string>
+    <string name="item_lemon">Citroen</string>
+    <string name="item_lime">Limoen</string>
+    <string name="item_orange">Sinaasappel</string>
+    <string name="item_pear">Peer</string>
+    <string name="item_strawberry">Aardbei</string>
+    <string name="item_watermelon">Watermeloen</string>
+    <string name="login_button_ok">OK</string>
+    <string name="login_label_hint">Geef je pincode in om verder te gaan</string>
+    <string name="cart_button_pay">Betalen</string>
+    <string name="cart_button_share">Deel mijn mandje!</string>
 </resources>
