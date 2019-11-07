@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/login_label_hint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="96dp"
+        android:text="@string/login_label_hint"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:id="@+id/login_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_label_hint"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="69dp">
+
+        <ImageView
+            android:id="@+id/orb_1"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:src="@drawable/orb_empty" />
+
+        <ImageView
+            android:id="@+id/orb_2"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/orb_empty" />
+
+        <ImageView
+            android:id="@+id/orb_3"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/orb_empty" />
+
+        <ImageView
+            android:id="@+id/orb_4"
+            android:layout_width="12dp"
+            android:layout_height="12dp"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/orb_empty" />
+    </LinearLayout>
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/login_progress"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="69dp"
+        android:background="@drawable/login_keyboard_background"
+        android:columnCount="3">
+
+        <TextView
+            android:id="@+id/login_button_1"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_1" />
+
+        <TextView
+            android:id="@+id/login_button_2"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_2" />
+
+        <TextView
+            android:id="@+id/login_button_3"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_3" />
+
+        <TextView
+            android:id="@+id/login_button_4"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_4" />
+
+        <TextView
+            android:id="@+id/login_button_5"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_5" />
+
+        <TextView
+            android:id="@+id/login_button_6"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_6" />
+
+        <TextView
+            android:id="@+id/login_button_7"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_7" />
+
+        <TextView
+            android:id="@+id/login_button_8"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_8" />
+
+        <TextView
+            android:id="@+id/login_button_9"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_9" />
+
+        <ImageView
+            android:id="@+id/login_button_backspace"
+            style="@style/LoginKeyboardButton"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_backspace" />
+
+        <TextView
+            android:id="@+id/login_button_0"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_0" />
+
+        <TextView
+            android:id="@+id/login_button_ok"
+            style="@style/LoginKeyboardButton"
+            android:text="@string/login_button_ok"
+            android:textColor="@color/login_keyboard_accent"
+            android:textSize="18sp" />
+
+    </GridLayout>
+
+</RelativeLayout>
