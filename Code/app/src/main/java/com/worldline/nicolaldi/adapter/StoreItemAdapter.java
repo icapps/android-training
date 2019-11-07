@@ -72,10 +72,10 @@ public class StoreItemAdapter extends RecyclerView.Adapter<StoreItemAdapter.Stor
                 }
             });
 
-            cardTitle = ((TextView) itemView.findViewById(R.id.card_title));
-            cardPrice = ((TextView) itemView.findViewById(R.id.card_price));
-            cardUnit = ((TextView) itemView.findViewById(R.id.card_unit));
-            cardImage = ((ImageView) itemView.findViewById(R.id.card_image));
+            cardTitle = itemView.findViewById(R.id.card_title);
+            cardPrice = itemView.findViewById(R.id.card_price);
+            cardUnit = itemView.findViewById(R.id.card_unit);
+            cardImage = itemView.findViewById(R.id.card_image);
         }
 
         public void bind(StoreItem item) {

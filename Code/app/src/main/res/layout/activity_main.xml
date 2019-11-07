@@ -12,17 +12,10 @@
         android:background="#AAA"
         tools:listitem="@layout/layout_card" />
 
-    <ScrollView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shoppingcart_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toEndOf="@id/items_container">
-
-        <LinearLayout
-            android:id="@+id/parent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-
-    </ScrollView>
+        android:layout_toEndOf="@id/items_container" />
 
 </RelativeLayout>

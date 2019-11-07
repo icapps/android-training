@@ -32,4 +32,14 @@ public class StoreItem {
     public int getImageResource() {
         return imageResource;
     }
+
+    @Override
+    public String toString() {
+        return "StoreItem{" +
+                "name='" + name + '\'' +
+                ", price=" + price +
+                ", unit='" + unit + '\'' +
+                ", imageResource=" + imageResource +
+                '}';
+    }
 }
