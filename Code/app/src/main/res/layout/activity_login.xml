@@ -56,7 +56,8 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="69dp"
         android:background="@drawable/login_keyboard_background"
-        android:columnCount="3">
+        android:columnCount="3"
+        android:padding="16dp">
 
         <TextView
             android:id="@+id/login_button_1"
@@ -106,17 +107,20 @@
         <ImageView
             android:id="@+id/login_button_backspace"
             style="@style/LoginKeyboardButton"
+            android:layout_marginTop="10dp"
             android:scaleType="centerInside"
             android:src="@drawable/ic_backspace" />
 
         <TextView
             android:id="@+id/login_button_0"
             style="@style/LoginKeyboardButton"
+            android:layout_marginTop="10dp"
             android:text="@string/login_button_0" />
 
         <TextView
             android:id="@+id/login_button_ok"
             style="@style/LoginKeyboardButton"
+            android:layout_marginTop="6dp"
             android:text="@string/login_button_ok"
             android:textColor="@color/login_keyboard_accent"
             android:textSize="18sp" />
