@@ -2,9 +2,9 @@ package com.worldline.nicolaldi;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +20,11 @@ public class DeeplinkActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_pay);
 
-        findViewById(R.id.button_success).setOnClickListener(new View.OnClickListener() {
+        double totalCost = getIntent().getDoubleExtra("total_amount", 0.0);
+
+        ((TextView) findViewById(R.id.payment_total)).setText("€ " + totalCost);
+
+        findViewById(R.id.payment_card).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 setResult(Activity.RESULT_OK);
@@ -28,11 +32,11 @@ public class DeeplinkActivity extends AppCompatActivity {
             }
         });
 
-        findViewById(R.id.button_failure).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.payment_cash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.putExtra("reason", "I don't want to pay");
+                intent.putExtra("reason", "I ran out of change");
                 setResult(Activity.RESULT_FIRST_USER, intent);
                 finish();
             }

@@ -52,6 +52,14 @@ public class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapte
         return shoppingCart.size();
     }
 
+    public double getTotalAmount() {
+        double total = 0.0;
+        for (CartItem cartItem : shoppingCart) {
+            total += cartItem.getTotalCost();
+        }
+        return total;
+    }
+
     public static class ShoppingCartViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView cartImage;

@@ -1,19 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/button_success"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Success!" />
+        android:layout_marginTop="96dp"
+        android:text="Choose payment method"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
 
-    <Button
-        android:id="@+id/button_failure"
+    <TextView
+        android:id="@+id/payment_total"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/button_success"
-        android:text="Failure!" />
+        android:layout_marginTop="55dp"
+        android:text="€ 102,10"
+        android:textColor="@android:color/white"
+        android:textSize="48sp"
+        android:textStyle="bold" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/payment_card"
+        android:layout_width="320dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="110dp"
+        android:background="@drawable/login_keyboard_background"
+        android:foreground="?selectableItemBackground"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/payment_card_background"
+            android:padding="12dp"
+            android:src="@drawable/ic_credit_card" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="Payment card"
+            android:textColor="#323645"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/payment_cash"
+        android:layout_width="320dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/login_keyboard_background"
+        android:foreground="?selectableItemBackground"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="32dp"
+            android:background="@drawable/payment_cash_background"
+            android:padding="12dp"
+            android:src="@drawable/ic_attach_money" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="Cash"
+            android:textColor="#323645"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

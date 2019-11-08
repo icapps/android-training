@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(thisRef, DeeplinkActivity.class);
+                intent.putExtra("total_amount", shoppingCartAdapter.getTotalAmount());
                 startActivityForResult(intent, REQUEST_PAY);
             }
         });
