@@ -2,7 +2,10 @@ package com.worldline.nicolaldi;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 
@@ -17,6 +20,7 @@ import com.worldline.nicolaldi.adapter.StoreItemAdapter;
 import com.worldline.nicolaldi.model.CartItem;
 import com.worldline.nicolaldi.model.StoreItem;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setupGrid();
+        loadStore2();
         setupShoppingCart();
         setupShareButton();
         setupPayButton();
@@ -47,11 +51,34 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         ((RecyclerView) findViewById(R.id.shoppingcart_view)).scrollToPosition(0);
     }
 
-    private void setupGrid() {
-        List<StoreItem> items = new ArrayList<>();
-        for (int i = 0; i < 10000; i++) {
-            items.add(new StoreItem(getString(R.string.item_apple), 10.0, "/kg", R.drawable.apple));
-        }
+    private void loadStore() {
+        final Handler handler = new Handler(Looper.getMainLooper());
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final List<StoreItem> items = new ArrayList<>();
+                for (int i = 0; i < 1000000; i++) {
+                    items.add(new StoreItem(getString(R.string.item_apple), 10.0, "/kg", R.drawable.apple));
+                }
+
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        setupGrid(items);
+                    }
+                });
+            }
+        });
+        thread.start();
+    }
+
+    private void loadStore2() {
+        new StoreLoadingTask(this).execute();
+    }
+
+    private void setupGrid(List<StoreItem> items) {
+        Log.d("TRACE", "Starting");
 
         StoreItemAdapter adapter = new StoreItemAdapter(items, this);
 
@@ -63,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         recyclerView.setAdapter(adapter);
 
         storeItems = items;
+
+        Log.d("TRACE", "Stopping");
     }
 
     private void setupShoppingCart() {
@@ -116,6 +145,33 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         }
 
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public class StoreLoadingTask extends AsyncTask<Void, Void, List<StoreItem>> {
+
+        WeakReference<MainActivity> reference;
+
+        public StoreLoadingTask(MainActivity activity) {
+            reference = new WeakReference<>(activity);
+        }
+
+        @Override
+        protected List<StoreItem> doInBackground(Void... voids) {
+            final List<StoreItem> items = new ArrayList<>();
+            for (int i = 0; i < 1000000; i++) {
+                items.add(new StoreItem(getString(R.string.item_apple), 10.0, "/kg", R.drawable.apple));
+            }
+            return items;
+        }
+
+        @Override
+        protected void onPostExecute(List<StoreItem> storeItems) {
+            super.onPostExecute(storeItems);
+
+            MainActivity activity = reference.get();
+            if (activity != null)
+                activity.setupGrid(storeItems);
+        }
     }
 
 }
