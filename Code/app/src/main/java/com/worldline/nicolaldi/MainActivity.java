@@ -19,6 +19,8 @@ import com.worldline.nicolaldi.adapter.ShoppingCartAdapter;
 import com.worldline.nicolaldi.adapter.StoreItemAdapter;
 import com.worldline.nicolaldi.model.CartItem;
 import com.worldline.nicolaldi.model.StoreItem;
+import com.worldline.nicolaldi.util.DatabaseCreator;
+import com.worldline.nicolaldi.util.DatabaseLoader;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadStore2();
+        loadStoreFromDatabase();
         setupShoppingCart();
         setupShareButton();
         setupPayButton();
@@ -138,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
             if (resultCode == Activity.RESULT_OK) {
                 //OK!
                 shoppingCartAdapter.clearCart();
-            } else if (resultCode == Activity.RESULT_FIRST_USER) {
+            } else if (resultCode == Activity.RESULT_FIRST_USER && data != null) {
                 String reason = data.getStringExtra("reason");
                 Log.d("MainActivity", "Result from pay: " + reason);
             }
@@ -172,6 +174,19 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
             if (activity != null)
                 activity.setupGrid(storeItems);
         }
+    }
+
+    private void loadStoreFromDatabase() {
+        DatabaseLoader.loadDatabase(this, new DatabaseLoader.DatabaseLoadListener() {
+            @Override
+            public void onDatabaseLoaded(List<StoreItem> items) {
+                setupGrid(items);
+            }
+        });
+    }
+
+    private void createDB() {
+        DatabaseCreator.createDatabase(this);
     }
 
 }
