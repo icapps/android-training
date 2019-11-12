@@ -22,6 +22,8 @@ import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.util.DatabaseCreator;
 import com.worldline.nicolaldi.util.DatabaseLoader;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         setContentView(R.layout.activity_main);
 
         loadStoreFromDatabase();
+        //loadStore2();
         setupShoppingCart();
         setupShareButton();
         setupPayButton();
@@ -139,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         if (requestCode == REQUEST_PAY) {
             if (resultCode == Activity.RESULT_OK) {
                 //OK!
+                saveTransaction();
                 shoppingCartAdapter.clearCart();
             } else if (resultCode == Activity.RESULT_FIRST_USER && data != null) {
                 String reason = data.getStringExtra("reason");
@@ -183,6 +187,21 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
                 setupGrid(items);
             }
         });
+    }
+
+    private void saveTransaction() {
+        double totalAmount = shoppingCartAdapter.getTotalAmount();
+        long timestamp = System.currentTimeMillis();
+
+        String transactionLogItem = timestamp + " = " + totalAmount + "\n";
+
+        try {
+            OutputStream outputStream = openFileOutput("transaction.log", MODE_APPEND);
+            outputStream.write(transactionLogItem.getBytes());
+            outputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void createDB() {

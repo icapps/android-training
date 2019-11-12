@@ -2,6 +2,7 @@ package com.worldline.nicolaldi.util;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
@@ -57,8 +58,49 @@ public class DatabaseLoader {
             return items;
         }
 
+        @Override
+        protected void onPostExecute(List<StoreItem> storeItems) {
+            super.onPostExecute(storeItems);
+            final DatabaseLoadListener databaseLoadListener = loadListener.get();
+            if (databaseLoadListener != null)
+                databaseLoadListener.onDatabaseLoaded(storeItems);
+        }
+
         private void queryIntoList(SQLiteDatabase database, List<StoreItem> items) {
-            //TODO let's create this method!
+            //SELECT * FROM products;
+            Cursor cursor = database.query(DatabaseCreator.DatabaseConstants.TABLE_NAME,
+                    null, null, null, null, null, null);
+            try {
+
+                if (!cursor.moveToFirst()) {
+                    return;
+                }
+
+                int nameIndex = cursor.getColumnIndex(DatabaseCreator.DatabaseConstants.COLUMN_NAME_KEY);
+                int unitIndex = cursor.getColumnIndex(DatabaseCreator.DatabaseConstants.COLUMN_UNIT);
+                int priceIndex = cursor.getColumnIndex(DatabaseCreator.DatabaseConstants.COLUMN_PRICE);
+                int imageIndex = cursor.getColumnIndex(DatabaseCreator.DatabaseConstants.COLUMN_IMAGE_KEY);
+
+                do {
+
+                    String nameKey = cursor.getString(nameIndex);
+                    String unit = cursor.getString(unitIndex);
+                    double price = cursor.getDouble(priceIndex);
+                    String imageKey = cursor.getString(imageIndex);
+
+                    int stringResource = DatabaseCreator.getStringResourceForKey(nameKey);
+                    int imageResource = DatabaseCreator.getImageResourceForKey(imageKey);
+                    StoreItem item = new StoreItem(applicationContext.getString(stringResource),
+                            price,
+                            unit,
+                            imageResource);
+
+                    items.add(item);
+                } while (cursor.moveToNext());
+
+            } finally {
+                cursor.close();
+            }
         }
 
         //Copy bytes from raw database resource to given file
