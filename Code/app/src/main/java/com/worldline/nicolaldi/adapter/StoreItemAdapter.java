@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
 import com.worldline.nicolaldi.R;
 import com.worldline.nicolaldi.model.StoreItem;
 
@@ -46,7 +47,7 @@ public class StoreItemAdapter extends RecyclerView.Adapter<StoreItemAdapter.Stor
     @Override
     public void onBindViewHolder(@NonNull StoreItemViewHolder holder, int position) {
         StoreItem item = storeItems.get(position);
-        holder.bind(item);
+        holder.bind(item, position);
     }
 
     @Override
@@ -78,8 +79,18 @@ public class StoreItemAdapter extends RecyclerView.Adapter<StoreItemAdapter.Stor
             cardImage = itemView.findViewById(R.id.card_image);
         }
 
-        public void bind(StoreItem item) {
-            cardImage.setImageResource(item.getImageResource());
+        public void bind(StoreItem item, int position) {
+            if (position == 0) {
+                Picasso.get()
+                        .load("https://placekitten.com/400/400")
+                        .fit()
+                        .centerCrop()
+                        .into(cardImage);
+            } else {
+                Picasso.get().cancelRequest(cardImage);
+                cardImage.setImageResource(item.getImageResource());
+            }
+
             cardTitle.setText(item.getName());
             cardUnit.setText(item.getUnit());
             cardPrice.setText("" + item.getPrice());

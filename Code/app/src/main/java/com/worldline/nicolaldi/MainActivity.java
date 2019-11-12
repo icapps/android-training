@@ -19,6 +19,7 @@ import com.worldline.nicolaldi.adapter.ShoppingCartAdapter;
 import com.worldline.nicolaldi.adapter.StoreItemAdapter;
 import com.worldline.nicolaldi.model.CartItem;
 import com.worldline.nicolaldi.model.StoreItem;
+import com.worldline.nicolaldi.model.TransactionModel;
 import com.worldline.nicolaldi.util.DatabaseCreator;
 import com.worldline.nicolaldi.util.DatabaseLoader;
 
@@ -28,6 +29,11 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements StoreItemAdapter.OnAdapterPositionClickListener {
 
@@ -143,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
             if (resultCode == Activity.RESULT_OK) {
                 //OK!
                 saveTransaction();
+                sendTransaction();
                 shoppingCartAdapter.clearCart();
             } else if (resultCode == Activity.RESULT_FIRST_USER && data != null) {
                 String reason = data.getStringExtra("reason");
@@ -202,6 +209,28 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void sendTransaction() {
+        String id = UUID.randomUUID().toString();
+        long timestamp = System.currentTimeMillis();
+        double totalAmount = shoppingCartAdapter.getTotalAmount();
+
+        Call<TransactionModel> transactionModelCall = ((MyApplication) getApplication()).service
+                .sendTransaction(new TransactionModel(id, totalAmount, timestamp));
+
+        transactionModelCall.enqueue(new Callback<TransactionModel>() {
+            @Override
+            public void onResponse(Call<TransactionModel> call, Response<TransactionModel> response) {
+                TransactionModel model = response.body();
+                Log.d("MainActivity", "Got response from server: " + model);
+            }
+
+            @Override
+            public void onFailure(Call<TransactionModel> call, Throwable t) {
+                Log.e("MainActivity", "Failed to call:", t);
+            }
+        });
     }
 
     private void createDB() {

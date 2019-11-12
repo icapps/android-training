@@ -17,4 +17,24 @@ public class TransactionModel {
         this.timestamp = timestamp;
     }
 
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionModel{" +
+                "transactionId='" + transactionId + '\'' +
+                ", total=" + total +
+                ", timestamp=" + timestamp +
+                '}';
+    }
 }
