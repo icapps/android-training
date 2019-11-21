@@ -88,8 +88,8 @@ public class DatabaseLoader {
                     double price = cursor.getDouble(priceIndex);
                     String imageKey = cursor.getString(imageIndex);
 
-                    int stringResource = DatabaseCreator.getStringResourceForKey(nameKey);
-                    int imageResource = DatabaseCreator.getImageResourceForKey(imageKey);
+                    int stringResource = DatabaseKeyMapper.getStringResourceForKey(nameKey);
+                    int imageResource = DatabaseKeyMapper.getImageResourceForKey(imageKey);
                     StoreItem item = new StoreItem(applicationContext.getString(stringResource),
                             price,
                             unit,

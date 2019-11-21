@@ -18,8 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String SAVED_STATE_PIN = "savedPin";
-    private static final String PREFERENCE_NAME = "supersecure";
-    private static final String PREFERENCE_KEY_PIN = "pin";
+    public static final String PREFERENCE_NAME = "supersecure";
+    public static final String PREFERENCE_KEY_PIN = "pin";
 
     private String unlockPin;
 
