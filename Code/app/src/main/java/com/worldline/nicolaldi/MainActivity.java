@@ -1,16 +1,26 @@
 package com.worldline.nicolaldi;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,6 +48,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements StoreItemAdapter.OnAdapterPositionClickListener {
 
     private static final int REQUEST_PAY = 10;
+    private static final int REQUEST_LOCATION_PERMISSION = 10;
 
     private List<StoreItem> storeItems;
     private ShoppingCartAdapter shoppingCartAdapter;
@@ -200,7 +211,16 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         double totalAmount = shoppingCartAdapter.getTotalAmount();
         long timestamp = System.currentTimeMillis();
 
-        String transactionLogItem = timestamp + " = " + totalAmount + "\n";
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = getLastKnownLocation(locationManager);
+
+        String transactionLogItem = timestamp + " = " + totalAmount;
+        if (location != null)
+            transactionLogItem += " @ " + location.toString();
+
+        transactionLogItem += "\n";
+
+        Log.d("MainActivity", transactionLogItem);
 
         try {
             OutputStream outputStream = openFileOutput("transaction.log", MODE_APPEND);
@@ -237,4 +257,36 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         DatabaseCreator.createDatabase(this);
     }
 
+    private Location getLastKnownLocation(LocationManager locationManager) {
+        final int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        }
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (permissions.length == 0) {
+                Toast.makeText(this, "You permanently denied our permission", Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "You granted our permission", Toast.LENGTH_LONG).show();
+            } else {
+                if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    Toast.makeText(this, "You permanently denied our permission", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "You denied our permission", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+    }
 }
