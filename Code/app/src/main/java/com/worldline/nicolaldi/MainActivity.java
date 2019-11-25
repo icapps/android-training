@@ -45,7 +45,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements StoreItemAdapter.OnAdapterPositionClickListener {
+public class MainActivity extends AppCompatActivity implements StoreItemAdapter.OnAdapterPositionClickListener,
+        DatabaseLoader.DatabaseLoadListener {
 
     private static final int REQUEST_PAY = 10;
     private static final int REQUEST_LOCATION_PERMISSION = 10;
@@ -199,12 +200,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
     }
 
     private void loadStoreFromDatabase() {
-        DatabaseLoader.loadDatabase(this, new DatabaseLoader.DatabaseLoadListener() {
-            @Override
-            public void onDatabaseLoaded(List<StoreItem> items) {
-                setupGrid(items);
-            }
-        });
+        DatabaseLoader.loadDatabase(this, this);
     }
 
     private void saveTransaction() {
@@ -288,5 +284,10 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
                 }
             }
         }
+    }
+
+    @Override
+    public void onDatabaseLoaded(List<StoreItem> items) {
+        setupGrid(items);
     }
 }

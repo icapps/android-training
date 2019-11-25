@@ -31,6 +31,8 @@ public class DatabaseKeyMapper {
                 return R.string.item_strawberry;
             case "watermelon":
                 return R.string.item_watermelon;
+            case "lime":
+                return R.string.item_lime;
         }
         return 0;
     }
