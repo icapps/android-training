@@ -1,14 +1,22 @@
 package com.worldline.nicolaldi.service;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
+import com.worldline.nicolaldi.MyApplication;
+import com.worldline.nicolaldi.R;
 import com.worldline.nicolaldi.util.TransactionSaver;
 
 import java.util.concurrent.Executor;
@@ -25,9 +33,36 @@ public class BoundTransactionSaverService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        transactionSaver = new TransactionSaver(this);
+        transactionSaver = ((MyApplication) this.getApplication()).transactionSaver;
 
         Log.d("BoundService", "Created!");
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        final Notification.Builder builder = new Notification.Builder(this)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setContentTitle("Service");
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            updateWithChannel(builder);
+        }
+
+        startForeground(10, builder
+                .build());
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void updateWithChannel(Notification.Builder builder) {
+        final NotificationChannel notificationChannel = new NotificationChannel("FGChannel",
+                "FG Channel Name", NotificationManager.IMPORTANCE_NONE);
+
+        ((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(notificationChannel);
+
+        builder.setChannelId("FGChannel");
     }
 
     @Override

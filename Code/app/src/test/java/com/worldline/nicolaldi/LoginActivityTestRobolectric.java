@@ -18,6 +18,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.junit.Assert.*;
 import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.ServiceTestRule;
+
+import com.worldline.nicolaldi.service.BoundTransactionSaverService;
 
 /**
  * @author Nicola Verbeeck

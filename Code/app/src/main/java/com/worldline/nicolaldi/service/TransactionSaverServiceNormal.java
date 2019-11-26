@@ -11,6 +11,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.worldline.nicolaldi.MyApplication;
 import com.worldline.nicolaldi.util.TransactionSaver;
 
 /**
@@ -34,7 +35,7 @@ public class TransactionSaverServiceNormal extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        saver = new TransactionSaver(this);
+        saver = ((MyApplication)this.getApplication()).transactionSaver;
         Log.d("TransactionNormal", "Service is being crearted :)");
     }
 

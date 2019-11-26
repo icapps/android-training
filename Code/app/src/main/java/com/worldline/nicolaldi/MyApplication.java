@@ -7,6 +7,9 @@ import com.icapps.niddler.interceptor.okhttp.NiddlerOkHttpInterceptor;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.worldline.nicolaldi.service.NicolaldiService;
+import com.worldline.nicolaldi.util.AlarmUtil;
+import com.worldline.nicolaldi.util.TransactionSaver;
+import com.worldline.nicolaldi.util.TransactionSender;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -19,6 +22,9 @@ public class MyApplication extends Application {
 
     OkHttpClient client;
     public NicolaldiService service;
+
+    public TransactionSaver transactionSaver;
+    public TransactionSender transactionSender;
 
     @Override
     public void onCreate() {
@@ -52,5 +58,10 @@ public class MyApplication extends Application {
         } catch (IllegalStateException e) {
             //Ignore
         }
+
+        transactionSaver = new TransactionSaver(this);
+        transactionSender = new TransactionSender(transactionSaver, service);
+
+        AlarmUtil.scheduleUploadAlarms(this);
     }
 }

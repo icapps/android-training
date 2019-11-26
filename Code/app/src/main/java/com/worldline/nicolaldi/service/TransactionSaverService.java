@@ -1,15 +1,16 @@
 package com.worldline.nicolaldi.service;
 
 import android.app.IntentService;
-import android.app.Service;
+import android.app.Notification;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
-import android.os.IBinder;
 import android.os.Looper;
 
 import androidx.annotation.Nullable;
 
+import com.worldline.nicolaldi.MyApplication;
+import com.worldline.nicolaldi.R;
 import com.worldline.nicolaldi.util.TransactionSaver;
 
 /**
@@ -20,7 +21,7 @@ public class TransactionSaverService extends IntentService {
     public static final String EXTRA_AMOUNT = "amount";
     public static final String EXTRA_LOCATION = "location";
 
-    public static Intent createIntent(Context context, double amount, Location location){
+    public static Intent createIntent(Context context, double amount, Location location) {
         Intent intent = new Intent(context, TransactionSaverService.class);
         intent.putExtra(EXTRA_AMOUNT, amount);
         intent.putExtra(EXTRA_LOCATION, location);
@@ -36,7 +37,7 @@ public class TransactionSaverService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        saver = new TransactionSaver(this);
+        saver = ((MyApplication) this.getApplication()).transactionSaver;
     }
 
     @Override

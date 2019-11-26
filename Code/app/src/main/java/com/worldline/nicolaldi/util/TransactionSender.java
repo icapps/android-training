@@ -2,6 +2,9 @@ package com.worldline.nicolaldi.util;
 
 import android.util.Log;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.WorkerThread;
+
 import com.worldline.nicolaldi.service.NicolaldiService;
 
 import java.io.IOException;
@@ -19,6 +22,7 @@ public class TransactionSender {
         webService = service;
     }
 
+    @WorkerThread
     public synchronized void sendTransactions() {
         Log.d("TransactionSender", "Sending transaction log");
 
