@@ -47,6 +47,10 @@ public class MyApplication extends Application {
         Picasso picasso = new Picasso.Builder(this)
                 .downloader(new OkHttp3Downloader(client))
                 .build();
-        Picasso.setSingletonInstance(picasso);
+        try {
+            Picasso.setSingletonInstance(picasso);
+        } catch (IllegalStateException e) {
+            //Ignore
+        }
     }
 }

@@ -235,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         Call<TransactionModel> transactionModelCall = ((MyApplication) getApplication()).service
                 .sendTransaction(new TransactionModel(id, totalAmount, timestamp));
 
+
         transactionModelCall.enqueue(new Callback<TransactionModel>() {
             @Override
             public void onResponse(Call<TransactionModel> call, Response<TransactionModel> response) {

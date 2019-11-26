@@ -1,5 +1,6 @@
 package com.worldline.nicolaldi.service;
 
+import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.model.TransactionModel;
 
 import retrofit2.Call;
