@@ -15,4 +15,7 @@ public interface NicolaldiService {
     @POST("/posts")
     Call<TransactionModel> sendTransaction(@Body TransactionModel model);
 
+    @POST("/posts")
+    Call<String> sendTransactionLog(@Body String logs);
+
 }

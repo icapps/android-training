@@ -32,9 +32,8 @@ import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.model.TransactionModel;
 import com.worldline.nicolaldi.util.DatabaseCreator;
 import com.worldline.nicolaldi.util.DatabaseLoader;
+import com.worldline.nicolaldi.util.TransactionSaver;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,11 +52,14 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
 
     private List<StoreItem> storeItems;
     private ShoppingCartAdapter shoppingCartAdapter;
+    private TransactionSaver transactionSaver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        transactionSaver = new TransactionSaver(this);
 
         loadStoreFromDatabase();
         //loadStore2();
@@ -205,26 +207,11 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
 
     private void saveTransaction() {
         double totalAmount = shoppingCartAdapter.getTotalAmount();
-        long timestamp = System.currentTimeMillis();
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = getLastKnownLocation(locationManager);
 
-        String transactionLogItem = timestamp + " = " + totalAmount;
-        if (location != null)
-            transactionLogItem += " @ " + location.toString();
-
-        transactionLogItem += "\n";
-
-        Log.d("MainActivity", transactionLogItem);
-
-        try {
-            OutputStream outputStream = openFileOutput("transaction.log", MODE_APPEND);
-            outputStream.write(transactionLogItem.getBytes());
-            outputStream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        transactionSaver.saveTransaction(totalAmount, location);
     }
 
     private void sendTransaction() {
