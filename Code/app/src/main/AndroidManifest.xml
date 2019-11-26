@@ -67,6 +67,8 @@
         </receiver>
 
         <service android:name=".service.TransactionSaverService" />
+        <service android:name=".service.TransactionSaverServiceNormal" />
+        <service android:name=".service.BoundTransactionSaverService" />
 
     </application>
 

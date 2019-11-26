@@ -2,8 +2,10 @@ package com.worldline.nicolaldi;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -11,8 +13,10 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
@@ -31,13 +35,14 @@ import com.worldline.nicolaldi.model.CartItem;
 import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.model.TransactionModel;
 import com.worldline.nicolaldi.receiver.NetworkChangeReceiver;
-import com.worldline.nicolaldi.service.TransactionSaverService;
+import com.worldline.nicolaldi.service.BoundTransactionSaverService;
+import com.worldline.nicolaldi.service.TransactionSaverServiceNormal;
 import com.worldline.nicolaldi.util.DatabaseCreator;
 import com.worldline.nicolaldi.util.DatabaseLoader;
-import com.worldline.nicolaldi.util.TransactionSaver;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -55,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
     private List<StoreItem> storeItems;
     private ShoppingCartAdapter shoppingCartAdapter;
     private NetworkChangeReceiver networkChangeReceiver;
+    private ServiceConnection serviceConnection;
+    private BoundTransactionSaverService.TransactionSaverBinder serviceBinder;
+    private List<Pair<Double, Location>> transactionSaveQueue = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +80,26 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
     protected void onStart() {
         super.onStart();
         networkChangeReceiver = NetworkChangeReceiver.startListeningForNetworkChanges(this);
+
+        Intent intent = new Intent(this, BoundTransactionSaverService.class);
+        serviceConnection = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                serviceBinder = ((BoundTransactionSaverService.TransactionSaverBinder) service);
+                for (Pair<Double, Location> doubleLocationPair : transactionSaveQueue) {
+                    serviceBinder.saveTransaction(doubleLocationPair.first, doubleLocationPair.second);
+                }
+                transactionSaveQueue.clear();
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                serviceBinder = null;
+            }
+        };
+
+        startService(intent);
+        bindService(intent, serviceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -79,6 +107,8 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         super.onStop();
         NetworkChangeReceiver.stopListeningForNetworkChanges(this, networkChangeReceiver);
         networkChangeReceiver = null;
+        unbindService(serviceConnection);
+        serviceBinder = null;
     }
 
     @Override
@@ -224,8 +254,13 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = getLastKnownLocation(locationManager);
 
-        Intent intent = TransactionSaverService.createIntent(this, totalAmount, location);
-        startService(intent);
+//        Intent intent = TransactionSaverServiceNormal.createIntent(this, totalAmount, location);
+//        startService(intent);
+
+        if (serviceBinder != null)
+            serviceBinder.saveTransaction(totalAmount, location);
+        else
+            transactionSaveQueue.add(new Pair<>(totalAmount, location));
     }
 
     private void sendTransaction() {
