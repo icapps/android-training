@@ -49,8 +49,6 @@ public class LoginActivityTestRobolectric {
 
     @Test
     public void testFirstTimePinSet() {
-
-
         assertTrue(sharedPreferences.getAll().isEmpty());
 
         onView(withText("1")).perform(click());

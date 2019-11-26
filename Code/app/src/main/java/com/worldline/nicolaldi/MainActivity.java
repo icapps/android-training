@@ -30,6 +30,8 @@ import com.worldline.nicolaldi.adapter.StoreItemAdapter;
 import com.worldline.nicolaldi.model.CartItem;
 import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.model.TransactionModel;
+import com.worldline.nicolaldi.receiver.NetworkChangeReceiver;
+import com.worldline.nicolaldi.service.TransactionSaverService;
 import com.worldline.nicolaldi.util.DatabaseCreator;
 import com.worldline.nicolaldi.util.DatabaseLoader;
 import com.worldline.nicolaldi.util.TransactionSaver;
@@ -52,20 +54,31 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
 
     private List<StoreItem> storeItems;
     private ShoppingCartAdapter shoppingCartAdapter;
-    private TransactionSaver transactionSaver;
+    private NetworkChangeReceiver networkChangeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        transactionSaver = new TransactionSaver(this);
-
         loadStoreFromDatabase();
         //loadStore2();
         setupShoppingCart();
         setupShareButton();
         setupPayButton();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        networkChangeReceiver = NetworkChangeReceiver.startListeningForNetworkChanges(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        NetworkChangeReceiver.stopListeningForNetworkChanges(this, networkChangeReceiver);
+        networkChangeReceiver = null;
     }
 
     @Override
@@ -211,7 +224,8 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Location location = getLastKnownLocation(locationManager);
 
-        transactionSaver.saveTransaction(totalAmount, location);
+        Intent intent = TransactionSaverService.createIntent(this, totalAmount, location);
+        startService(intent);
     }
 
     private void sendTransaction() {
