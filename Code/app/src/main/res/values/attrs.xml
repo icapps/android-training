@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PinProgressView">
+        <attr name="numberOfPinItems" format="integer" />
+        <attr name="orbSize" format="dimension" />
+        <attr name="orbMargin" format="dimension" />
+    </declare-styleable>
+
+</resources>

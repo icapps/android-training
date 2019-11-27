@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.worldline.nicolaldi.view.PinProgressView;
+
 /**
  * @author Nicola Verbeeck
  */
@@ -129,15 +131,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updatePinProgress() {
-        ImageView orb1 = findViewById(R.id.orb_1);
-        ImageView orb2 = findViewById(R.id.orb_2);
-        ImageView orb3 = findViewById(R.id.orb_3);
-        ImageView orb4 = findViewById(R.id.orb_4);
-
-        orb1.setImageResource(currentPinCode.length() > 0 ? R.drawable.orb_filled : R.drawable.orb_empty);
-        orb2.setImageResource(currentPinCode.length() > 1 ? R.drawable.orb_filled : R.drawable.orb_empty);
-        orb3.setImageResource(currentPinCode.length() > 2 ? R.drawable.orb_filled : R.drawable.orb_empty);
-        orb4.setImageResource(currentPinCode.length() == 4 ? R.drawable.orb_filled : R.drawable.orb_empty);
+        ((PinProgressView)findViewById(R.id.login_progress)).setCurrentPinLength(currentPinCode.length());
     }
 
 }

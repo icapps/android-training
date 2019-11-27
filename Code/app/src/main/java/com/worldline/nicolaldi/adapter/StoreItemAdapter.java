@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.worldline.nicolaldi.R;
 import com.worldline.nicolaldi.model.StoreItem;
+import com.worldline.nicolaldi.view.ProductCardView;
 
 import java.util.List;
 
@@ -41,7 +42,7 @@ public class StoreItemAdapter extends RecyclerView.Adapter<StoreItemAdapter.Stor
 
         Log.d("Recycler", "Created total of: " + count + " views");
 
-        return new StoreItemViewHolder(view, clickListener);
+        return new StoreItemViewHolder((ProductCardView) view, clickListener);
     }
 
     @Override
@@ -57,12 +58,9 @@ public class StoreItemAdapter extends RecyclerView.Adapter<StoreItemAdapter.Stor
 
     public static class StoreItemViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView cardImage;
-        private final TextView cardTitle;
-        private final TextView cardPrice;
-        private final TextView cardUnit;
+        private final ProductCardView cardView;
 
-        public StoreItemViewHolder(@NonNull View itemView, final OnAdapterPositionClickListener clickListener) {
+        public StoreItemViewHolder(@NonNull ProductCardView itemView, final OnAdapterPositionClickListener clickListener) {
             super(itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -73,27 +71,11 @@ public class StoreItemAdapter extends RecyclerView.Adapter<StoreItemAdapter.Stor
                 }
             });
 
-            cardTitle = itemView.findViewById(R.id.card_title);
-            cardPrice = itemView.findViewById(R.id.card_price);
-            cardUnit = itemView.findViewById(R.id.card_unit);
-            cardImage = itemView.findViewById(R.id.card_image);
+            this.cardView = itemView;
         }
 
         public void bind(StoreItem item, int position) {
-            if (position == 0) {
-                Picasso.get()
-                        .load("https://placekitten.com/400/400")
-                        .fit()
-                        .centerCrop()
-                        .into(cardImage);
-            } else {
-                Picasso.get().cancelRequest(cardImage);
-                cardImage.setImageResource(item.getImageResource());
-            }
-
-            cardTitle.setText(item.getName());
-            cardUnit.setText(item.getUnit());
-            cardPrice.setText("" + item.getPrice());
+            cardView.bind(item);
         }
 
     }

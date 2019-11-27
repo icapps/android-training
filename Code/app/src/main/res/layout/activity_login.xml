@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,41 +14,16 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
-    <LinearLayout
+    <com.worldline.nicolaldi.view.PinProgressView
         android:id="@+id/login_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/login_label_hint"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="69dp">
-
-        <ImageView
-            android:id="@+id/orb_1"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:src="@drawable/orb_empty" />
-
-        <ImageView
-            android:id="@+id/orb_2"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/orb_empty" />
-
-        <ImageView
-            android:id="@+id/orb_3"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/orb_empty" />
-
-        <ImageView
-            android:id="@+id/orb_4"
-            android:layout_width="12dp"
-            android:layout_height="12dp"
-            android:layout_marginLeft="16dp"
-            android:src="@drawable/orb_empty" />
-    </LinearLayout>
+        android:layout_marginTop="69dp"
+        app:numberOfPinItems="4"
+        app:orbMargin="16dp"
+        app:orbSize="12dp" />
 
     <GridLayout
         android:layout_width="wrap_content"
