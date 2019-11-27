@@ -9,12 +9,9 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
@@ -25,23 +22,17 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.worldline.nicolaldi.adapter.ShoppingCartAdapter;
-import com.worldline.nicolaldi.adapter.StoreItemAdapter;
+import com.worldline.nicolaldi.fragment.ProductsFragment;
 import com.worldline.nicolaldi.model.CartItem;
 import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.model.TransactionModel;
 import com.worldline.nicolaldi.receiver.NetworkChangeReceiver;
 import com.worldline.nicolaldi.service.BoundTransactionSaverService;
-import com.worldline.nicolaldi.service.TransactionSaverServiceNormal;
-import com.worldline.nicolaldi.util.DatabaseCreator;
-import com.worldline.nicolaldi.util.DatabaseLoader;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -51,13 +42,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements StoreItemAdapter.OnAdapterPositionClickListener,
-        DatabaseLoader.DatabaseLoadListener {
+public class MainActivity extends AppCompatActivity implements ProductsFragment.StoreItemClickListener {
 
     private static final int REQUEST_PAY = 10;
     private static final int REQUEST_LOCATION_PERMISSION = 10;
 
-    private List<StoreItem> storeItems;
     private ShoppingCartAdapter shoppingCartAdapter;
     private NetworkChangeReceiver networkChangeReceiver;
     private ServiceConnection serviceConnection;
@@ -69,8 +58,12 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loadStoreFromDatabase();
-        //loadStore2();
+        if (getSupportFragmentManager().findFragmentById(R.id.product_fragment_container) == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.product_fragment_container, new ProductsFragment(), "products!")
+                    .commit();
+        }
+
         setupShoppingCart();
         setupShareButton();
         setupPayButton();
@@ -112,54 +105,10 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
     }
 
     @Override
-    public void onPositionClicked(int position) {
-        Log.d("MainActivity", "Clicked on position -> " + position + " this is product: " + storeItems.get(position));
-        shoppingCartAdapter.addNewItem(new CartItem(storeItems.get(position), new Random().nextInt(5)));
+    public void onStoreItemClicked(StoreItem item) {
+        shoppingCartAdapter.addNewItem(new CartItem(item, new Random().nextInt(5)));
 
         ((RecyclerView) findViewById(R.id.shoppingcart_view)).scrollToPosition(0);
-    }
-
-    private void loadStore() {
-        final Handler handler = new Handler(Looper.getMainLooper());
-
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final List<StoreItem> items = new ArrayList<>();
-                for (int i = 0; i < 1000000; i++) {
-                    items.add(new StoreItem(getString(R.string.item_apple), 10.0, "/kg", R.drawable.apple));
-                }
-
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        setupGrid(items);
-                    }
-                });
-            }
-        });
-        thread.start();
-    }
-
-    private void loadStore2() {
-        new StoreLoadingTask(this).execute();
-    }
-
-    private void setupGrid(List<StoreItem> items) {
-        Log.d("TRACE", "Starting");
-
-        StoreItemAdapter adapter = new StoreItemAdapter(items, this);
-
-        RecyclerView recyclerView = findViewById(R.id.items_container);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 5);
-
-        recyclerView.setLayoutManager(gridLayoutManager);
-        recyclerView.setAdapter(adapter);
-
-        storeItems = items;
-
-        Log.d("TRACE", "Stopping");
     }
 
     private void setupShoppingCart() {
@@ -217,37 +166,6 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public class StoreLoadingTask extends AsyncTask<Void, Void, List<StoreItem>> {
-
-        WeakReference<MainActivity> reference;
-
-        public StoreLoadingTask(MainActivity activity) {
-            reference = new WeakReference<>(activity);
-        }
-
-        @Override
-        protected List<StoreItem> doInBackground(Void... voids) {
-            final List<StoreItem> items = new ArrayList<>();
-            for (int i = 0; i < 1000000; i++) {
-                items.add(new StoreItem(getString(R.string.item_apple), 10.0, "/kg", R.drawable.apple));
-            }
-            return items;
-        }
-
-        @Override
-        protected void onPostExecute(List<StoreItem> storeItems) {
-            super.onPostExecute(storeItems);
-
-            MainActivity activity = reference.get();
-            if (activity != null)
-                activity.setupGrid(storeItems);
-        }
-    }
-
-    private void loadStoreFromDatabase() {
-        DatabaseLoader.loadDatabase(this, this);
-    }
-
     private void saveTransaction() {
         double totalAmount = shoppingCartAdapter.getTotalAmount();
 
@@ -286,10 +204,6 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         });
     }
 
-    private void createDB() {
-        DatabaseCreator.createDatabase(this);
-    }
-
     private Location getLastKnownLocation(LocationManager locationManager) {
         final int result = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (result == PackageManager.PERMISSION_GRANTED) {
@@ -323,8 +237,4 @@ public class MainActivity extends AppCompatActivity implements StoreItemAdapter.
         }
     }
 
-    @Override
-    public void onDatabaseLoaded(List<StoreItem> items) {
-        setupGrid(items);
-    }
 }
