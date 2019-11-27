@@ -27,8 +27,8 @@ public class DatabaseLoader {
 
     private static final String TAG = "DatabaseLoader";
 
-    public static void loadDatabase(Context context, DatabaseLoadListener listener) {
-        new DatabaseLoadingTask(context, listener).execute();
+    public static void loadDatabase(Context context, String nameKey, DatabaseLoadListener listener) {
+        new DatabaseLoadingTask(context, nameKey, listener).execute();
     }
 
     private static class DatabaseLoadingTask extends AsyncTask<Void, Void, List<StoreItem>> {
@@ -36,10 +36,12 @@ public class DatabaseLoader {
         @SuppressLint("StaticFieldLeak")
         private final Context applicationContext;
         private final WeakReference<DatabaseLoadListener> loadListener;
+        private String nameKey;
 
-        public DatabaseLoadingTask(Context context, DatabaseLoadListener loadListener) {
+        public DatabaseLoadingTask(Context context, String nameKey, DatabaseLoadListener loadListener) {
             this.applicationContext = context.getApplicationContext();
             this.loadListener = new WeakReference<>(loadListener);
+            this.nameKey = nameKey;
         }
 
         @Override
@@ -67,9 +69,9 @@ public class DatabaseLoader {
         }
 
         private void queryIntoList(SQLiteDatabase database, List<StoreItem> items) {
-            //SELECT * FROM products;
+            //SELECT * FROM products WHERE nameKey=...;
             Cursor cursor = database.query(DatabaseCreator.DatabaseConstants.TABLE_NAME,
-                    null, null, null, null, null, null);
+                    null, DatabaseCreator.DatabaseConstants.COLUMN_NAME_KEY + "=?", new String[]{nameKey}, null, null, null);
             try {
 
                 if (!cursor.moveToFirst()) {

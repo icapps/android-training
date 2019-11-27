@@ -25,6 +25,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.tabs.TabLayout;
 import com.worldline.nicolaldi.adapter.ShoppingCartAdapter;
 import com.worldline.nicolaldi.fragment.ProductsFragment;
 import com.worldline.nicolaldi.model.CartItem;
@@ -59,10 +60,48 @@ public class MainActivity extends AppCompatActivity implements ProductsFragment.
         setContentView(R.layout.activity_main);
 
         if (getSupportFragmentManager().findFragmentById(R.id.product_fragment_container) == null) {
+            ProductsFragment fragment = new ProductsFragment();
+            Bundle arguments = new Bundle();
+            arguments.putString(ProductsFragment.ARGUMENT_NAMEKEY, "banana");
+            fragment.setArguments(arguments);
+
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.product_fragment_container, new ProductsFragment(), "products!")
+                    .replace(R.id.product_fragment_container, fragment, "products!")
                     .commit();
         }
+
+        TabLayout layout = (TabLayout)findViewById(R.id.products_tabs);
+
+        layout.addTab(layout.newTab().setText("Bananas").setTag("banana"));
+        layout.addTab(layout.newTab().setText("Lemons").setTag("lemon"));
+        layout.addTab(layout.newTab().setText("Strawberry").setTag("strawberry"));
+
+        layout.addOnTabSelectedListener(new TabLayout.BaseOnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.d("Tabs", "Tab selected!! " + tab);
+                String tag = (String)tab.getTag();
+
+                ProductsFragment fragment = new ProductsFragment();
+                Bundle arguments = new Bundle();
+                arguments.putString(ProductsFragment.ARGUMENT_NAMEKEY, tag);
+                fragment.setArguments(arguments);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.product_fragment_container, fragment, "products!")
+                        .commit();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
         setupShoppingCart();
         setupShareButton();

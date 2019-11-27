@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +16,6 @@ import com.worldline.nicolaldi.adapter.StoreItemAdapter;
 import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.util.DatabaseLoader;
 
-import java.sql.DatabaseMetaData;
 import java.util.List;
 
 /**
@@ -25,6 +23,8 @@ import java.util.List;
  */
 public class ProductsFragment extends BaseFragment implements StoreItemAdapter.OnAdapterPositionClickListener,
         DatabaseLoader.DatabaseLoadListener {
+
+    public static final String ARGUMENT_NAMEKEY = "nameKey";
 
     private RecyclerView itemsRecycler;
     private List<StoreItem> storeItems;
@@ -42,7 +42,8 @@ public class ProductsFragment extends BaseFragment implements StoreItemAdapter.O
     @Override
     public void onStart() {
         super.onStart();
-        DatabaseLoader.loadDatabase(requireContext(), this);
+        String nameKey = getArguments().getString(ARGUMENT_NAMEKEY);
+        DatabaseLoader.loadDatabase(requireContext(), nameKey, this);
     }
 
     private void setupGrid(List<StoreItem> items) {

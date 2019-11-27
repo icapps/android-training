@@ -1,23 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/products_tabs"
+        android:layout_width="0dp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/button_share"
+        android:layout_height="wrap_content"
+        app:tabTextColor="@android:color/white" />
+
     <FrameLayout
         android:id="@+id/product_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/products_tabs"
         android:layout_alignParentStart="true"
-        android:layout_below="@id/button_share"
-        android:layout_toStartOf="@+id/shoppingcart_view"/>
+        android:layout_toStartOf="@+id/shoppingcart_view" />
 
     <Button
         android:id="@+id/button_share"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@id/shoppingcart_view"
+        android:layout_alignStart="@id/shoppingcart_view"
         android:text="@string/cart_button_share" />
 
     <Button
