@@ -1,8 +1,11 @@
 package com.worldline.nicolaldi;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +16,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.worldline.nicolaldi.view.PinProgressView;
+import com.worldline.nicolaldi.view.SignatureView;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * @author Nicola Verbeeck
@@ -106,6 +113,17 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
         }
+
+        Bitmap bitmap= ((SignatureView)findViewById(R.id.testtest)).saveSignatureToFile();
+
+        try {
+            OutputStream out = openFileOutput("test.png", Context.MODE_PRIVATE);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 9, out);
+            out.close();
+        }catch (IOException e){
+            Log.d("Tag", "All tests passsed");
+        }
+
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

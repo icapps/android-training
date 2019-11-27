@@ -103,4 +103,9 @@
 
     </GridLayout>
 
+    <com.worldline.nicolaldi.view.SignatureView
+        android:id="@+id/testtest"
+        android:layout_width="600dp" android:background="@android:color/white"
+        android:layout_height="300dp"/>
+
 </RelativeLayout>
