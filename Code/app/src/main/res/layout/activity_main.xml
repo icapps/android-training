@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         app:tabTextColor="@android:color/white" />
 
-    <FrameLayout
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/product_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
