@@ -103,9 +103,12 @@
 
     </GridLayout>
 
-    <com.worldline.nicolaldi.view.SignatureView
-        android:id="@+id/testtest"
-        android:layout_width="600dp" android:background="@android:color/white"
-        android:layout_height="300dp"/>
+    <Button
+        android:id="@+id/button_signature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="Signature" />
 
 </RelativeLayout>

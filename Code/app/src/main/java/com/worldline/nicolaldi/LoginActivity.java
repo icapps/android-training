@@ -1,13 +1,9 @@
 package com.worldline.nicolaldi;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,10 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.worldline.nicolaldi.view.PinProgressView;
-import com.worldline.nicolaldi.view.SignatureView;
-
-import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * @author Nicola Verbeeck
@@ -51,6 +43,13 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             ((TextView) findViewById(R.id.login_label_hint)).setText("Please configure pincode");
         }
+
+        findViewById(R.id.button_signature).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, SignatureActivity.class));
+            }
+        });
     }
 
     @Override
@@ -114,17 +113,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
 
-        Bitmap bitmap= ((SignatureView)findViewById(R.id.testtest)).saveSignatureToFile();
-
-        try {
-            OutputStream out = openFileOutput("test.png", Context.MODE_PRIVATE);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 9, out);
-            out.close();
-        }catch (IOException e){
-            Log.d("Tag", "All tests passsed");
-        }
-
-
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
 
@@ -149,7 +137,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void updatePinProgress() {
-        ((PinProgressView)findViewById(R.id.login_progress)).setCurrentPinLength(currentPinCode.length());
+        ((PinProgressView) findViewById(R.id.login_progress)).setCurrentPinLength(currentPinCode.length());
     }
 
 }
