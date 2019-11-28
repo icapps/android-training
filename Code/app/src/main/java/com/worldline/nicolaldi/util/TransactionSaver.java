@@ -1,5 +1,6 @@
 package com.worldline.nicolaldi.util;
 
+import android.app.Application;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
@@ -11,14 +12,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * @author Nicola Verbeeck
  */
+@Singleton
 public class TransactionSaver {
 
     private final Context applicationContext;
 
-    public TransactionSaver(Context context) {
+    @Inject
+    public TransactionSaver(Application context) {
         applicationContext = context.getApplicationContext();
     }
 

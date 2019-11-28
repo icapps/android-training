@@ -2,12 +2,6 @@ package com.worldline.nicolaldi.di;
 
 import android.app.Application;
 
-import com.worldline.nicolaldi.service.NicolaldiService;
-import com.worldline.nicolaldi.util.TransactionSaver;
-import com.worldline.nicolaldi.util.TransactionSender;
-
-import javax.inject.Singleton;
-
 import dagger.Module;
 import dagger.Provides;
 
@@ -26,12 +20,6 @@ public class ApplicationModule {
     @Provides
     public Application provideApplication() {
         return application;
-    }
-
-    @Provides
-    @Singleton
-    public TransactionSaver provideTransactionSaver() {
-        return new TransactionSaver(application);
     }
 
 }

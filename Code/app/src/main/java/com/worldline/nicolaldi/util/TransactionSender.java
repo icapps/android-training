@@ -12,6 +12,8 @@ import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import dagger.Lazy;
+
 /**
  * @author Nicola Verbeeck
  */
@@ -19,10 +21,10 @@ import javax.inject.Singleton;
 public class TransactionSender {
 
     private final NicolaldiService webService;
-    private final TransactionSaver transactionSaver;
+    private final Lazy<TransactionSaver> transactionSaver;
 
     @Inject
-    public TransactionSender(TransactionSaver saver, NicolaldiService service) {
+    public TransactionSender(Lazy<TransactionSaver> saver, NicolaldiService service) {
         transactionSaver = saver;
         webService = service;
     }
@@ -31,7 +33,7 @@ public class TransactionSender {
     public synchronized void sendTransactions() {
         Log.d("TransactionSender", "Sending transaction log");
 
-        final String transactionLog = transactionSaver.getTransactionLog();
+        final String transactionLog = transactionSaver.get().getTransactionLog();
 
         try {
             webService.sendTransactionLog(transactionLog).execute();
