@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="loginHintText"
+            type="String" />
+
+        <variable
+            name="signatureIsAvailable"
+            type="Boolean" />
+
+        <import type="android.view.View" />
+    </data>
+
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -12,9 +26,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="96dp"
-            android:text="@string/login_label_hint"
+            android:text="@{loginHintText ?? @string/login_label_hint}"
             android:textColor="@android:color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            tools:text="Blablablabla" />
 
         <com.worldline.nicolaldi.view.PinProgressView
             android:id="@+id/login_progress"
@@ -111,7 +126,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:text="Signature" />
+            android:text="Signature"
+            android:visibility="@{signatureIsAvailable ? View.VISIBLE : View.GONE}" />
 
     </RelativeLayout>
 </layout>

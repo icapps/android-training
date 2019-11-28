@@ -42,8 +42,9 @@ public class LoginActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE);
         if (preferences.contains(PREFERENCE_KEY_PIN)) {
             unlockPin = preferences.getString(PREFERENCE_KEY_PIN, "");
+            binding.setSignatureIsAvailable(true);
         } else {
-            binding.loginLabelHint.setText("Please configure pincode");
+            binding.setLoginHintText("Please configure pincode");
         }
 
         binding.buttonSignature.setOnClickListener(new View.OnClickListener() {
