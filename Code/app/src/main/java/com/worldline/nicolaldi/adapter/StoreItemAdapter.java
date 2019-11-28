@@ -4,13 +4,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
 import com.worldline.nicolaldi.R;
 import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.view.ProductCardView;
@@ -29,6 +27,11 @@ public class StoreItemAdapter extends RecyclerView.Adapter<StoreItemAdapter.Stor
     public StoreItemAdapter(List<StoreItem> storeItems, OnAdapterPositionClickListener clickListener) {
         this.storeItems = storeItems;
         this.clickListener = clickListener;
+    }
+
+    public void setStoreItems(List<StoreItem> items) {
+        storeItems = items;
+        notifyDataSetChanged();
     }
 
     @NonNull
