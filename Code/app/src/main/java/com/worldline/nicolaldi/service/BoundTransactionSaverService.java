@@ -22,18 +22,22 @@ import com.worldline.nicolaldi.util.TransactionSaver;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerService;
+
 /**
  * @author Nicola Verbeeck
  */
-public class BoundTransactionSaverService extends Service {
+public class BoundTransactionSaverService extends DaggerService {
 
-    private TransactionSaver transactionSaver;
+    @Inject
+    TransactionSaver transactionSaver;
     private Executor executor = Executors.newSingleThreadExecutor();
 
     @Override
     public void onCreate() {
         super.onCreate();
-        transactionSaver = ((MyApplication) this.getApplication()).transactionSaver;
 
         Log.d("BoundService", "Created!");
     }

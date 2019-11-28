@@ -1,29 +1,26 @@
 package com.worldline.nicolaldi.service;
 
-import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.worldline.nicolaldi.MyApplication;
 import com.worldline.nicolaldi.util.TransactionSender;
+
+import javax.inject.Inject;
+
+import dagger.android.DaggerIntentService;
 
 /**
  * @author Nicola Verbeeck
  */
-public class TransactionSenderService extends IntentService {
+public class TransactionSenderService extends DaggerIntentService {
 
-    private TransactionSender transactionSender;
+    @Inject
+    TransactionSender transactionSender;
 
     public TransactionSenderService() {
         super("TransactionSender");
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        transactionSender = ((MyApplication)this.getApplication()).transactionSender;
     }
 
     @Override

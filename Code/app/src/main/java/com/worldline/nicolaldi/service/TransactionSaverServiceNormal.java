@@ -1,6 +1,5 @@
 package com.worldline.nicolaldi.service;
 
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -14,10 +13,14 @@ import androidx.annotation.Nullable;
 import com.worldline.nicolaldi.MyApplication;
 import com.worldline.nicolaldi.util.TransactionSaver;
 
+import javax.inject.Inject;
+
+import dagger.android.DaggerService;
+
 /**
  * @author Nicola Verbeeck
  */
-public class TransactionSaverServiceNormal extends Service {
+public class TransactionSaverServiceNormal extends DaggerService {
 
     public static final String EXTRA_AMOUNT = "amount";
     public static final String EXTRA_LOCATION = "location";
@@ -29,13 +32,13 @@ public class TransactionSaverServiceNormal extends Service {
         return intent;
     }
 
-    private TransactionSaver saver;
+    @Inject
+    TransactionSaver saver;
     private Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     public void onCreate() {
         super.onCreate();
-        saver = ((MyApplication)this.getApplication()).transactionSaver;
         Log.d("TransactionNormal", "Service is being crearted :)");
     }
 

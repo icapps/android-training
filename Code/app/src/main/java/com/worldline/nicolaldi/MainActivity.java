@@ -35,6 +35,7 @@ import com.worldline.nicolaldi.model.StoreItem;
 import com.worldline.nicolaldi.model.TransactionModel;
 import com.worldline.nicolaldi.receiver.NetworkChangeReceiver;
 import com.worldline.nicolaldi.service.BoundTransactionSaverService;
+import com.worldline.nicolaldi.service.NicolaldiService;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -42,11 +43,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
+import dagger.android.support.DaggerAppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements ProductsFragment.StoreItemClickListener {
+public class MainActivity extends DaggerAppCompatActivity implements ProductsFragment.StoreItemClickListener {
 
     private static final int REQUEST_PAY = 10;
     private static final int REQUEST_LOCATION_PERMISSION = 10;
@@ -57,9 +61,13 @@ public class MainActivity extends AppCompatActivity implements ProductsFragment.
     private BoundTransactionSaverService.TransactionSaverBinder serviceBinder;
     private List<Pair<Double, Location>> transactionSaveQueue = new LinkedList<>();
 
+    @Inject
+    NicolaldiService service;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         if (getSupportFragmentManager().findFragmentById(R.id.product_fragment_container) == null) {
@@ -207,9 +215,8 @@ public class MainActivity extends AppCompatActivity implements ProductsFragment.
         long timestamp = System.currentTimeMillis();
         double totalAmount = shoppingCartAdapter.getTotalAmount();
 
-        Call<TransactionModel> transactionModelCall = ((MyApplication) getApplication()).service
+        Call<TransactionModel> transactionModelCall = service
                 .sendTransaction(new TransactionModel(id, totalAmount, timestamp));
-
 
         transactionModelCall.enqueue(new Callback<TransactionModel>() {
             @Override

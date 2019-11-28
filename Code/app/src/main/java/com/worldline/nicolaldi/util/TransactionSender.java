@@ -9,14 +9,19 @@ import com.worldline.nicolaldi.service.NicolaldiService;
 
 import java.io.IOException;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * @author Nicola Verbeeck
  */
+@Singleton
 public class TransactionSender {
 
     private final NicolaldiService webService;
     private final TransactionSaver transactionSaver;
 
+    @Inject
     public TransactionSender(TransactionSaver saver, NicolaldiService service) {
         transactionSaver = saver;
         webService = service;
