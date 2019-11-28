@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.worldline.nicolaldi.databinding.ActivityLoginBinding;
 import com.worldline.nicolaldi.view.PinProgressView;
 
 /**
@@ -28,9 +29,10 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_login);
+        ActivityLoginBinding binding = ActivityLoginBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        setupKeyboard();
+        setupKeyboard(binding);
 
         if (savedInstanceState != null) {
             currentPinCode = savedInstanceState.getString(SAVED_STATE_PIN, "");
@@ -41,10 +43,10 @@ public class LoginActivity extends AppCompatActivity {
         if (preferences.contains(PREFERENCE_KEY_PIN)) {
             unlockPin = preferences.getString(PREFERENCE_KEY_PIN, "");
         } else {
-            ((TextView) findViewById(R.id.login_label_hint)).setText("Please configure pincode");
+            binding.loginLabelHint.setText("Please configure pincode");
         }
 
-        findViewById(R.id.button_signature).setOnClickListener(new View.OnClickListener() {
+        binding.buttonSignature.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, SignatureActivity.class));
@@ -59,25 +61,25 @@ public class LoginActivity extends AppCompatActivity {
         outState.putString(SAVED_STATE_PIN, currentPinCode);
     }
 
-    private void setupKeyboard() {
-        setupDigit(findViewById(R.id.login_button_0), 0);
-        setupDigit(findViewById(R.id.login_button_1), 1);
-        setupDigit(findViewById(R.id.login_button_2), 2);
-        setupDigit(findViewById(R.id.login_button_3), 3);
-        setupDigit(findViewById(R.id.login_button_4), 4);
-        setupDigit(findViewById(R.id.login_button_5), 5);
-        setupDigit(findViewById(R.id.login_button_6), 6);
-        setupDigit(findViewById(R.id.login_button_7), 7);
-        setupDigit(findViewById(R.id.login_button_8), 8);
-        setupDigit(findViewById(R.id.login_button_9), 9);
+    private void setupKeyboard(ActivityLoginBinding binding) {
+        setupDigit(binding.loginButton0, 0);
+        setupDigit(binding.loginButton1, 1);
+        setupDigit(binding.loginButton2, 2);
+        setupDigit(binding.loginButton3, 3);
+        setupDigit(binding.loginButton4, 4);
+        setupDigit(binding.loginButton5, 5);
+        setupDigit(binding.loginButton6, 6);
+        setupDigit(binding.loginButton7, 7);
+        setupDigit(binding.loginButton8, 8);
+        setupDigit(binding.loginButton9, 9);
 
-        findViewById(R.id.login_button_ok).setOnClickListener(new View.OnClickListener() {
+        binding.loginButtonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onOkClicked();
             }
         });
-        findViewById(R.id.login_button_backspace).setOnClickListener(new View.OnClickListener() {
+        binding.loginButtonBackspace.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackspaceClicked();
